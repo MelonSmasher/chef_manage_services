@@ -5,7 +5,7 @@
 
 # This function managed the service
 def manage_service(
-    name,
+    service,
     ignore_fail_option,
     service_name_option,
     actions_option,
