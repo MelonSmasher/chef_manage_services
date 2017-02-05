@@ -5,6 +5,7 @@
 
 # This function managed the service
 def manage_service(
+    name,
     ignore_fail_option,
     service_name_option,
     actions_option,
@@ -297,6 +298,7 @@ if node['manage_services']['services']
     if ignore_fail_option
       begin
         manage_service(
+            service,
             ignore_fail_option,
             service_name_option,
             actions_option,
@@ -323,6 +325,7 @@ if node['manage_services']['services']
       end
     else
       manage_service(
+          service,
           ignore_fail_option,
           service_name_option,
           actions_option,
