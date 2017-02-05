@@ -7,7 +7,6 @@
 ignore_failure_option = node['chef_services']['ignore_failure']
 
 node['chef_services']['services'].each do |service, service_options|
-
   # Grab the service name option
   service_name_option = service
   if service_options.service_name
@@ -51,9 +50,8 @@ node['chef_services']['services'].each do |service, service_options|
     actions_option.push(:nothing)
   end
 
-
   # If the service has ignore failure overridden, set it.
-  unless service_options.ignore_failure.nil?
+  unless service_options.ignore_failure
     ignore_failure_option = service_options.ignore_failure
   end
 
@@ -168,7 +166,7 @@ node['chef_services']['services'].each do |service, service_options|
 
     # Set the notifies option if needed
     if notifies_option
-      if notifies_option['action'] and notifies_option['resource']
+      if notifies_option['action'] && notifies_option['resource']
         if notifies_option['timer']
           notifies notifies_option['action'].to_s.to_sym, notifies_option['resource'].to_s, notifies_option['timer'].to_s.to_sym
         else
@@ -238,7 +236,7 @@ node['chef_services']['services'].each do |service, service_options|
 
     # Set the subscribes directive if needed
     if subscribes_option
-      if subscribes_option['action'] and subscribes_option['resource']
+      if subscribes_option['action'] && subscribes_option['resource']
         if subscribes_option['timer']
           subscribes subscribes_option['action'].to_s.to_sym, subscribes_option['resource'], subscribes_option['timer'].to_s.to_sym
         else
@@ -264,6 +262,5 @@ node['chef_services']['services'].each do |service, service_options|
         timeout timeout_option
       end
     end
-
   end
 end
