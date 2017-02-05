@@ -146,7 +146,7 @@ end
 
 
 # Global value for ignoring failures
-ignore_fail_option = node['manage_services']['ignore_failure']
+ignore_fail_option = node['manage_services']['ignore_failures']
 
 if node['manage_services']['services']
 
@@ -296,58 +296,28 @@ if node['manage_services']['services']
       end
     end
 
-    if ignore_fail_option
-      begin
-        manage_service(
-            service,
-            ignore_fail_option,
-            service_name_option,
-            actions_option,
-            notifies_option,
-            init_cmd_option,
-            pattern_option,
-            priority_option,
-            provider_option,
-            reload_cmd_option,
-            restart_cmd_option,
-            retries_option,
-            retry_delay_option,
-            start_cmd_option,
-            status_cmd_option,
-            stop_cmd_option,
-            subscribes_option,
-            supports_option,
-            timeout_option
-        )
-      rescue
-        log 'Services' do
-          message "Service resource failed."
-          level :warn
-        end
-      end
-    else
-      manage_service(
-          service,
-          ignore_fail_option,
-          service_name_option,
-          actions_option,
-          notifies_option,
-          init_cmd_option,
-          pattern_option,
-          priority_option,
-          provider_option,
-          reload_cmd_option,
-          restart_cmd_option,
-          retries_option,
-          retry_delay_option,
-          start_cmd_option,
-          status_cmd_option,
-          stop_cmd_option,
-          subscribes_option,
-          supports_option,
-          timeout_option
-      )
-    end
+    # Call the manage_service function
+    manage_service(
+        service,
+        ignore_fail_option,
+        service_name_option,
+        actions_option,
+        notifies_option,
+        init_cmd_option,
+        pattern_option,
+        priority_option,
+        provider_option,
+        reload_cmd_option,
+        restart_cmd_option,
+        retries_option,
+        retry_delay_option,
+        start_cmd_option,
+        status_cmd_option,
+        stop_cmd_option,
+        subscribes_option,
+        supports_option,
+        timeout_option
+    )
   end
 else
   log 'Services' do
