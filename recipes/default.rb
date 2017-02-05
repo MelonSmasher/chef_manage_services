@@ -6,7 +6,7 @@
 # Global value for ignoring failures
 ignore_failure_option = node['manage_services']['ignore_failure']
 
-node['chef_services']['services'].each do |service, service_options|
+node['manage_services']['services'].each do |service, service_options|
 
   # Grab the service name option
   service_name_option = service
