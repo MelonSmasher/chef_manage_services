@@ -4,19 +4,20 @@
 #
 
 # Global value for ignoring failures
-ignore_failure_option = node['chef_services']['ignore_failure']
+ignore_failure_option = node['manage_services']['ignore_failure']
 
 node['chef_services']['services'].each do |service, service_options|
+
   # Grab the service name option
   service_name_option = service
-  if service_options.service_name
-    service_name_option = service_options.service_name
+  if service_options['service_name']
+    service_name_option = service_options['service_name']
   end
 
   # get the actions that we should run on the service
   actions_option = []
-  if service_options.action
-    service_options.action.each do |action|
+  if service_options['action']
+    service_options['action'].each do |action|
       case action.downcase
         when 'disable'
           actions_option.push(:disable)
@@ -50,103 +51,104 @@ node['chef_services']['services'].each do |service, service_options|
     actions_option.push(:nothing)
   end
 
+
   # If the service has ignore failure overridden, set it.
-  unless service_options.ignore_failure
-    ignore_failure_option = service_options.ignore_failure
+  unless service_options['ignore_failure'].nil?
+    ignore_failure_option = service_options['ignore_failure']
   end
 
   # If we need to grab the init command
   init_command_option = false
-  if service_options.init_command
-    init_command_option = service_options.init_command
+  if service_options['init_command']
+    init_command_option = service_options['init_command']
   end
 
   # Determine if there is anything to notify
   notifies_option = false
-  if service_options.notifies
-    notifies_option = service_options.notifies
+  if service_options['notifies']
+    notifies_option = service_options['notifies']
   end
 
   # Grab the pattern
   pattern_option = service_name_option
-  if service_options.pattern
-    pattern_option = service_options.pattern
+  if service_options['pattern']
+    pattern_option = service_options['pattern']
   end
 
   # Grab the priority if the node is debian based
   priority_option = false
   if node['platform'] == 'debian'
-    if service_options.priority
-      priority_option = service_options.priority
+    if service_options['priority']
+      priority_option = service_options['priority']
     end
   end
 
   # Grab the provider
   provider_option = false
-  if service_options.provider
-    provider_option = service_options.provider
+  if service_options['provider']
+    provider_option = service_options['provider']
   end
 
   # Grab the reload command
   reload_command_option = false
-  if service_options.reload_command
-    reload_command_option = service_options.reload_command
+  if service_options['reload_command']
+    reload_command_option = service_options['reload_command']
   end
 
   # Grab the restart command
   restart_command_option = false
-  if service_options.restart_command
-    restart_command_option = service_options.restart_command
+  if service_options['restart_command']
+    restart_command_option = service_options['restart_command']
   end
 
   # Grab the retries option
   retries_option = 0
-  if service_options.retries
-    retries_option = service_options.retries
+  if service_options['retries']
+    retries_option = service_options['retries']
   end
 
   # Grab the retries delay option
   retry_delay_option = 2
-  if service_options.retry_delay
-    retry_delay_option = service_options.retry_delay
+  if service_options['retry_delay']
+    retry_delay_option = service_options['retry_delay']
   end
 
   # Grab the start command option
   start_command_option = false
-  if service_options.start_command
-    start_command_option = service_options.start_command
+  if service_options['start_command']
+    start_command_option = service_options['start_command']
   end
 
   # Grab the status command option
   status_command_option = false
-  if service_options.status_command
-    status_command_option = service_options.status_command
+  if service_options['status_command']
+    status_command_option = service_options['status_command']
   end
 
   # Grab the stop command option
   stop_command_option = false
-  if service_options.stop_command
-    stop_command_option = service_options.stop_command
+  if service_options['stop_command']
+    stop_command_option = service_options['stop_command']
   end
 
   # Grab the subscribes option
   subscribes_option = false
-  if service_options.subscribes
-    subscribes_option = service_options.subscribes
+  if service_options['subscribes']
+    subscribes_option = service_options['subscribes']
   end
 
   # Grab the supports option
   supports_option = false
-  if service_options.supports
-    supports_option = service_options.supports
+  if service_options['supports']
+    supports_option = service_options['supports']
   end
 
   # Grab the timeout option if on windows
   timeout_option = false
   if node['platform'] == 'windows'
     timeout_option = 60
-    if service_options.timeout
-      timeout_option = service_options.timeout
+    if service_options['timeout']
+      timeout_option = service_options['timeout']
     end
   end
 
@@ -262,5 +264,6 @@ node['chef_services']['services'].each do |service, service_options|
         timeout timeout_option
       end
     end
+
   end
 end
