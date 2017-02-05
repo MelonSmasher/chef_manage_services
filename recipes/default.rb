@@ -10,33 +10,35 @@ node['chef_services']['services'].each do |service, service_options|
 
   # Grab the service name option
   service_name_option = service
-  unless service_options['service_name'].nil?
+  if service_options['service_name']
     service_name_option = service_options['service_name']
   end
 
   # get the actions that we should run on the service
   actions_option = []
-  service_options['action'].each do |action|
-    case action.downcase
-      when 'disable'
-        actions_option.push(:disable)
-      when 'enable'
-        actions_option.push(:enable)
-      when 'nothing'
-        actions_option.push(:nothing)
-      when 'reload'
-        actions_option.push(:reload)
-      when 'restart'
-        actions_option.push(:restart)
-      when 'start'
-        actions_option.push(:start)
-      when 'stop'
-        actions_option.push(:stop)
-      else
-        log 'Services' do
-          message "The service: '#{service}' contains a malformed or unknown action (#{action})... ignoring it!"
-          level :warn
-        end
+  if service_options['action']
+    service_options['action'].each do |action|
+      case action.downcase
+        when 'disable'
+          actions_option.push(:disable)
+        when 'enable'
+          actions_option.push(:enable)
+        when 'nothing'
+          actions_option.push(:nothing)
+        when 'reload'
+          actions_option.push(:reload)
+        when 'restart'
+          actions_option.push(:restart)
+        when 'start'
+          actions_option.push(:start)
+        when 'stop'
+          actions_option.push(:stop)
+        else
+          log 'Services' do
+            message "The service: '#{service}' contains a malformed or unknown action (#{action})... ignoring it!"
+            level :warn
+          end
+      end
     end
   end
 
@@ -57,87 +59,87 @@ node['chef_services']['services'].each do |service, service_options|
 
   # If we need to grab the init command
   init_command_option = false
-  unless service_options['init_command'].nil?
+  if service_options['init_command']
     init_command_option = service_options['init_command']
   end
 
   # Determine if there is anything to notify
-  notify_option = false
-  unless service_options['notify'].nil?
-    notify_option = service_options['notify']
+  notifies_option = false
+  if service_options['notifies']
+    notifies_option = service_options['notifies']
   end
 
   # Grab the pattern
   pattern_option = service_name_option
-  unless service_options['pattern'].nil?
+  if service_options['pattern']
     pattern_option = service_options['pattern']
   end
 
   # Grab the priority if the node is debian based
   priority_option = false
   if node['platform'] == 'debian'
-    unless service_options['priority'].nil?
+    if service_options['priority']
       priority_option = service_options['priority']
     end
   end
 
   # Grab the provider
   provider_option = false
-  unless service_options['provider'].nil?
+  if service_options['provider']
     provider_option = service_options['provider']
   end
 
   # Grab the reload command
   reload_command_option = false
-  unless service_options['reload_command'].nil?
+  if service_options['reload_command']
     reload_command_option = service_options['reload_command']
   end
 
   # Grab the restart command
   restart_command_option = false
-  unless service_options['restart_command'].nil?
+  if service_options['restart_command']
     restart_command_option = service_options['restart_command']
   end
 
   # Grab the retries option
   retries_option = 0
-  unless service_options['retries'].nil?
+  if service_options['retries']
     retries_option = service_options['retries']
   end
 
   # Grab the retries delay option
   retry_delay_option = 2
-  unless service_options['retry_delay'].nil?
+  if service_options['retry_delay']
     retry_delay_option = service_options['retry_delay']
   end
 
   # Grab the start command option
   start_command_option = false
-  unless service_options['start_command'].nil?
+  if service_options['start_command']
     start_command_option = service_options['start_command']
   end
 
   # Grab the status command option
   status_command_option = false
-  unless service_options['status_command'].nil?
+  if service_options['status_command']
     status_command_option = service_options['status_command']
   end
 
   # Grab the stop command option
   stop_command_option = false
-  unless service_options['stop_command'].nil?
+  if service_options['stop_command']
     stop_command_option = service_options['stop_command']
   end
 
   # Grab the subscribes option
   subscribes_option = false
-  unless service_options['subscribes'].nil?
+  if service_options['subscribes']
     subscribes_option = service_options['subscribes']
   end
 
   # Grab the supports option
   supports_option = false
-  unless service_options['supports'].nil?
+  if service_options['supports']
     supports_option = service_options['supports']
   end
 
@@ -145,7 +147,7 @@ node['chef_services']['services'].each do |service, service_options|
   timeout_option = false
   if node['platform'] == 'windows'
     timeout_option = 60
-    unless service_options['timeout'].nil?
+    if service_options['timeout']
       timeout_option = service_options['timeout']
     end
   end
@@ -165,12 +167,12 @@ node['chef_services']['services'].each do |service, service_options|
     end
 
     # Set the notifies option if needed
-    if notify_option
-      if notify_option['action'] and notify_option['resource']
-        if notify_option['timer']
-          notifies notify_option['action'].to_s.to_sym, notify_option['resource'].to_s, notify_option['timer'].to_s.to_sym
+    if notifies_option
+      if notifies_option['action'] and notifies_option['resource']
+        if notifies_option['timer']
+          notifies notifies_option['action'].to_s.to_sym, notifies_option['resource'].to_s, notifies_option['timer'].to_s.to_sym
         else
-          notifies notify_option['action'].to_s.to_sym, notify_option['resource'].to_s, :delayed
+          notifies notifies_option['action'].to_s.to_sym, notifies_option['resource'].to_s, :delayed
         end
       end
     end
